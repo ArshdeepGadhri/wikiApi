@@ -1,6 +1,6 @@
 # WikiApp
 
-A simple python web app to retrieve info form wikipedia articles
+A simple python web app to retrieve info form wikipedia articles as well as a free to use Api
 
 ### In Progress
 Api [ ]
