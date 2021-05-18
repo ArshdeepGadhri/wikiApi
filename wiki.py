@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-from bs4.element import Tag
 
 
 class Wikipedia:
@@ -10,9 +9,9 @@ class Wikipedia:
     paragraphs: list
     infobox: dict
 
-    def __init__(self, title: str, lang="en") -> None:
+    def __init__(self, title: str, length=10) -> None:
         self.title = title
-        self.lang = lang
+        self.length = length
         self.paragraphs = []
         self.infobox = {}
         self.headers = {
@@ -46,10 +45,8 @@ class Wikipedia:
         title = soup.find(id="firstHeading")
 
         paragraphs = soup.find(id="bodyContent").find_all("p")
-        for para in paragraphs[:10]:
-            self.paragraphs.append(para.get_text()
-                                   .replace('\n', '')
-                                   .replace('\t', '').strip())
+        for para in paragraphs[:self.length]:
+            self.paragraphs.append(para.get_text().strip())
 
         infobox = soup.find(id='bodyContent').findAll('tr')
         for info in infobox[:30]:
@@ -58,12 +55,12 @@ class Wikipedia:
             try:
                 self.infobox[th.text.strip()] = td.text.strip()
             except:
-                return {'status': 'bad'}
+                return {'status': 0}
 
         self.title = title.string.strip()
 
         return {
-            'status': 'good',
+            'status': 1,
             "Title": self.title,
             'paragraphs': self.paragraphs,
             'infobox': self.infobox
